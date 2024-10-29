@@ -49,4 +49,86 @@ contract NftMarketPlace {
             ""
         );
     }
+
+    // Function to create an auction
+    function createAuction(
+        address _nftAddress,
+        uint256 _tokenId,
+        uint256 _minBid,
+        uint256 _duration
+    ) external returns (uint256) {
+        auctionCount++;
+        uint256 auctionId = auctionCount;
+
+        auctions[auctionId] = Auction({
+            nftAddress: _nftAddress,
+            tokenId: _tokenId,
+            seller: payable(msg.sender),
+            minBid: _minBid,
+            highestBid: 0,
+            highestBidder: payable(address(0)),
+            endTime: block.timestamp + _duration,
+            isActive: true
+        });
+
+        IERC721(_nftAddress).transferFrom(msg.sender, address(this), _tokenId);
+
+        emit AuctionCreated(
+            auctionId,
+            msg.sender,
+            _minBid,
+            block.timestamp + _duration
+        );
+        return auctionId;
+    }
+
+    // Function to place a bid
+    function placeBid(uint256 _auctionId) external payable nonReentrant {
+        Auction storage auction = auctions[_auctionId];
+        require(block.timestamp < auction.endTime, "Auction has ended");
+        require(auction.isActive, "Auction is not active");
+        require(
+            msg.value > auction.minBid && msg.value > auction.highestBid,
+            "Bid too low"
+        );
+
+        if (auction.highestBid > 0) {
+            auction.highestBidder.transfer(auction.highestBid);
+        }
+
+        auction.highestBid = msg.value;
+        auction.highestBidder = payable(msg.sender);
+
+        emit NewBid(_auctionId, msg.sender, msg.value);
+    }
+
+    // Function to finalize the auction
+    function finalizeAuction(uint256 _auctionId) external nonReentrant {
+        Auction storage auction = auctions[_auctionId];
+        require(block.timestamp >= auction.endTime, "Auction is still active");
+        require(auction.isActive, "Auction has already been finalized");
+
+        auction.isActive = false;
+
+        if (auction.highestBidder != address(0)) {
+            IERC721(auction.nftAddress).transferFrom(
+                address(this),
+                auction.highestBidder,
+                auction.tokenId
+            );
+            auction.seller.transfer(auction.highestBid);
+        } else {
+            IERC721(auction.nftAddress).transferFrom(
+                address(this),
+                auction.seller,
+                auction.tokenId
+            );
+        }
+
+        emit AuctionFinalized(
+            _auctionId,
+            auction.highestBidder,
+            auction.highestBid
+        );
+    }
 }
