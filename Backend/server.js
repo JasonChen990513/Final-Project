@@ -3,6 +3,9 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 
 const { connectDB } = require("./connectToDB");
+const { ethers } = require("ethers");
+
+const { contractABI } = require("./abi");
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
@@ -14,13 +17,13 @@ connectDB(DB_URL);
 app.use(cors());
 
 // Configure provider and wallet
-const provider = new ethers.providers.JsonRpcProvider('https://node1.maalscan.io');
+const provider = new ethers.JsonRpcProvider('https://node1.maalscan.io');
 const privateKey = '.......PK';
 const wallet = new ethers.Wallet(privateKey, provider);
 
 // Smart contract details
 const contractAddress = 'contract address';
-const contractABI = [];
+
 const auctionContract = new ethers.Contract(contractAddress, contractABI, wallet);
 
 // Place a bid endpoint
