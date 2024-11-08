@@ -2,6 +2,7 @@ const env = require('dotenv');
 env.config();
 
 const { Metadata } = require('../model/model');
+const { NFTInfo } = require('../model/model');
 const { ethers } = require('ethers');
 const FormData = require('form-data');
 const axios = require('axios');
@@ -35,7 +36,7 @@ const createERC721Token = async (req, res) => {
     console.log('this is json cid: '+json_cid);
 
     //create the token
-    createNFT(mintTo, json_cid);
+    //createNFT(mintTo, json_cid);
 
 
     res.json({ message: 'Token created successfully' });
@@ -135,13 +136,27 @@ const createNFT = async (mintTo, json_cid) => {
       }
 }
 
-const appendToDB = async (jsonFile) => {
+const appendToDB = async (name, description, mintTo, image, tokenId) => {
     console.log(jsonFile)
     let metadata = new Metadata({
-        name: jsonFile.name,
-        description: jsonFile.description,
-        image: jsonFile.image
+        name: name,
+        description: description,
+        image: image
     })
 
     await metadata.save();
+
+    let nftInfo = new NFTInfo({
+        metadata: metadata,
+        mintTo: mintTo,
+        tokenId: tokenId,
+        price: 0,
+    })
+
+    await nftInfo.save();
+
+
 }
+
+
+module.exports = { appendToDB };

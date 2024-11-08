@@ -17,19 +17,12 @@ const metadataSchema = new mongoose.Schema({
 });
 
 const auctionSchema = new mongoose.Schema({
-    name: {
-        type: String,
+
+    metadata: {
+        type:  mongoose.Schema.ObjectId,
+        ref: 'Metadata',
         required: true
     },
-    description: {
-        type: String,
-        required: true
-    },
-    image: {
-        type: String,
-        required: true
-    },
-    metadata: metadataSchema,
     nftAddress: {
         type: String,
         required: true
@@ -63,21 +56,15 @@ const auctionSchema = new mongoose.Schema({
 
 const userSchema = new mongoose.Schema(
     {
-        email: {
+        address: {
             type: String,
             required: true
         },
 
-        firstName: {
+        name: {
             type: String,
             trim: true,
-            default: ""
-        },
-
-        lastName: {
-            type: String,
-            trim: true,
-            default: ""
+            required: true
         },
 
         password: {
@@ -100,11 +87,13 @@ const transactionHistorySchema = new mongoose.Schema({
         required: true
     },
     seller: {
-        type: String,
+        type:  mongoose.Schema.ObjectId,
+        ref: 'User',
         required: true
     },
     buyer: {
-        type: String,
+        type:  mongoose.Schema.ObjectId,
+        ref: 'User',
         required: true
     },
     price: {
@@ -113,7 +102,7 @@ const transactionHistorySchema = new mongoose.Schema({
     },
     date: {
         type: Date,
-        required: true
+        default: Date.now
     }
 });
 
@@ -135,6 +124,14 @@ const nftInfoSchema = new mongoose.Schema({
     price: {
         type: String,
         required: true
+    },
+    sellStatus: {
+        type: Boolean,
+        default: false
+    },
+    sellType: {
+        type: String,
+        required: true
     }
 });
 
@@ -145,4 +142,4 @@ const Auction = mongoose.model('Like', auctionSchema);
 const TransactionHistory = mongoose.model('TransactionHistory', transactionHistorySchema);
 const NFTInfo = mongoose.model('NFTInfo', nftInfoSchema);
 
-module.exports = { User, Metadata, Auction };
+module.exports = { User, Metadata, Auction, TransactionHistory, NFTInfo };

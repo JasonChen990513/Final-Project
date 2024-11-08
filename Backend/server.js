@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const { erc721Router } = require("./routes/erc721");
 
 const { connectDB } = require("./connectToDB");
 const { ethers } = require("ethers");
@@ -15,6 +16,9 @@ const app = express();
 connectDB(DB_URL);
 //enable cors
 app.use(cors());
+
+// create buy and sell
+app.use('/api/v1/erc721', erc721Router);
 
 // Configure provider and wallet
 const provider = new ethers.JsonRpcProvider('https://node1.maalscan.io');
