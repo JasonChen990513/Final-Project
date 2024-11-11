@@ -42,6 +42,4 @@ const auth = (req, res, next) => {
 			data: null,
 		});
     }
-
-
 }

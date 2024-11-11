@@ -148,9 +148,11 @@ const appendToDB = async (name, description, mintTo, image, tokenId) => {
 
     let nftInfo = new NFTInfo({
         metadata: metadata,
-        mintTo: mintTo,
         tokenId: tokenId,
+        owner: mintTo,
         price: 0,
+        sellStatus: false,
+        sellType: 'fixed'
     })
 
     await nftInfo.save();
