@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const { User } = require('../model/model');
 const { ethers } = require('ethers');
 
+
 const env = require('dotenv');
 env.config();
 const jwtSecret = process.env.JWT_SECRET
@@ -13,7 +14,9 @@ const vaildationSchena = Joi.object({
 })
 
 const validationAddress = (address) => {
-    if (ethers.utils.isAddress(address)) {
+    console.log(address);
+    console.log(ethers.isAddress(address));
+    if (ethers.isAddress(address)) {
         console.log('Valid wallet address');
         return true;
       } else {
@@ -24,22 +27,25 @@ const validationAddress = (address) => {
 
 const createUser = async(req, res) => {
     try{
+        console.log('create user');
+        console.log(req.body);
         const { name, address, password } = req.body;
-        const { error } = vaildationSchena.validate(password);
-
+        const passwordobj = {password: password};
+        const { error } = vaildationSchena.validate(passwordobj);
         if(error){
+            console.log(error);
             const message = error.details[0].message;
             const err = new Error(message);
             err.statusCode = 400;
             throw err 
         }
-
         if(!validationAddress(address)){
             const err = new Error('Invalid wallet address');
+            console.log(err);
             err.statusCode = 400;
             throw err;
         }
-
+        console.log('validation done');
         let user = await User.findOne({address});
 
         if(user) throw new Error('User already exists');
@@ -76,7 +82,11 @@ const createUser = async(req, res) => {
 const loginUser = async(req, res) => {
     try{
         const { address, password } = req.body;
-        const { error } = vaildationSchena.validate(password);
+        console.log('in login')
+        console.log(address);
+
+        const passwordobj = {password: password};
+        const { error } = vaildationSchena.validate(passwordobj);
 
         if(error){
             const message = error.details[0].message;
@@ -90,8 +100,9 @@ const loginUser = async(req, res) => {
             err.statusCode = 400;
             throw err;
         }
-
-        let user = await User.findOne({address});
+        console.log('validation done');
+        
+        let user = await User.findOne({address: address});
         if(!user) throw new Error('User does not exist');
 
         const hashedPassword = user.password;
@@ -110,10 +121,10 @@ const loginUser = async(req, res) => {
 
         // Set the token in an HTTP-Only cookie
         res.cookie('token', token, {
-            httpOnly: true,  // Can't be accessed by JavaScript
-            secure: true,    // Send only over HTTPS (important for production)
-            sameSite: 'Strict', // Helps with CSRF protection
-            maxAge: 3600000   // 1 hour in milliseconds
+            httpOnly: true,  
+            secure: true,    
+            sameSite: 'Strict', 
+            maxAge: 3600000*6   
         });
 
         res.status(200).json({
@@ -122,6 +133,7 @@ const loginUser = async(req, res) => {
             data: {
                 email: user.email,
                 token: token,
+                username: user.name
             }
         })
 

@@ -7,6 +7,7 @@ const test = "FlO9yja5F9IuoY0otX0v4pax+zE=";
 const auth = (req, res, next) => {
 
     try {
+        console.log(req.headers.cookie);
         const cookieToken = req.headers.cookie.split('=');
         const cookieTokensplit = cookieToken[1];
         
@@ -24,10 +25,10 @@ const auth = (req, res, next) => {
         // const jwtToken = splitToken?.[1];
         const result = jwt.verify(cookieTokensplit,test);
         //const result = jwt.verify(jwtToken, jwtSecret);
-        console.log('this is result')
-        console.log(result);
+        //console.log('this is result')
+        //console.log(result);
         const userId = result?.id;
-        console.log(userId)
+        //console.log(userId)
 
         req.id = userId;
 
@@ -43,3 +44,5 @@ const auth = (req, res, next) => {
 		});
     }
 }
+
+module.exports = { auth };

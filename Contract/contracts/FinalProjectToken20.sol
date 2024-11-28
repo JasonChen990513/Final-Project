@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract FinalProjectToken20 is ERC20, Ownable {
-    constructor() ERC20("FinalProjectTokenFor", "FPT") Ownable() {
+    constructor() ERC20("FinalProjectToken", "FPT") Ownable() {
         _mint(msg.sender, 1000 * (10 ** 18));
     }
 

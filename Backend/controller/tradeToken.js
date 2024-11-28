@@ -4,16 +4,20 @@ env.config();
 const { NFTInfo } = require('../model/model');
 
 
-const sellNFT = async (tokenId, price) => {
+const sellNFT = async (req, res) => {
+    const { tokenId, price } = req.body;
     const nftinfo = await NFTInfo.findOne({ tokenId: tokenId });
     // update the selling price and status
     nftinfo.price = price;
     nftinfo.sellStatus = true;
 
     await nftinfo.save();
+    
+    res.json({ message: 'NFT place to sell successfully' });
 }
 
-const buyNFT = async (tokenId, buyer) => {
+const buyNFT = async (req, res) => {
+    const { tokenId, buyer } = req.body;
     const nftinfo = await NFTInfo.findOne({ tokenId: tokenId });
     const seller = nftinfo.owner;
 

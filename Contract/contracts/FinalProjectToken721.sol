@@ -15,6 +15,9 @@ contract FinalProjectToken721 is
 {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenId;
+    uint256 public currentTokenId = 0;
+
+    event MintTokenId(address tokenOwner, uint256 tokenId);
 
     constructor() ERC721("FinalProjectToken", "FPT") Ownable() {}
 
@@ -24,11 +27,17 @@ contract FinalProjectToken721 is
         super._burn(tokenId);
     }
 
-    function mintNFT(address receiver, string memory _tokenURI) public {
+    function mintNFT(
+        address receiver,
+        string memory _tokenURI
+    ) public returns (uint256) {
         _tokenId.increment();
         uint256 newTokenId = _tokenId.current();
         _mint(receiver, newTokenId);
         _setTokenURI(newTokenId, _tokenURI);
+        currentTokenId = newTokenId;
+        emit MintTokenId(receiver, newTokenId); // Emit the event
+        return newTokenId;
     }
 
     // The following functions are overrides required by Solidity.
