@@ -4,6 +4,7 @@ import { ethers } from "ethers";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { serverUrl } from "../util/constant";
+import { useNavigate } from "react-router-dom";
 
 
 const ProfileNft = () => {
@@ -18,6 +19,8 @@ const ProfileNft = () => {
     const [minbid, setMinbid] = useState(0);
     const [duration, setDuration] = useState(0);
     const [bidAmount, setBidAmount] = useState(0);
+
+    const navigate = useNavigate();
 
     const handlePlaceToSell721 = async () => {
         const { signer } = await connectWallet();
@@ -139,6 +142,7 @@ const ProfileNft = () => {
         else {
             handlePlaceToSell1155();
         }
+        navigate('/homepage');
     }
 
     const handleBid = async () => {
@@ -148,6 +152,7 @@ const ProfileNft = () => {
         else {
             handleBid1155();
         }
+        navigate('/homepage');
     }
 
     return (

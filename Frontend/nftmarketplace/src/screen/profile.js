@@ -197,6 +197,14 @@ const Profile = () => {
         }
     }
 
+    const handlefinalize = async () => {
+        const { signer } = await connectWallet();
+        const contract = await getContract(signer);
+
+        const finalizeTx = await contract.finalizeAuction(1);
+        await finalizeTx.wait(); // Wait for the finalizing transaction to be mined
+    }
+
     const reder721list = user721NftList?.map((item, index) => {
         
         return (
@@ -236,6 +244,7 @@ const Profile = () => {
 
             <button onClick={handlePlaceToSell}> place to sell</button>
             <button onClick={handleBuy}> buy </button>
+            <button onClick={handlefinalize}> finalize </button>
             {/* <button onClick={get1155balance}> get 1155 balance </button> */}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
