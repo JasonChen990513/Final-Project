@@ -30,6 +30,8 @@ const Login = () => {
 
     const handleLogin = async () => {
         console.log('in handleLogin');
+        console.log(address);
+        console.log(password);
         axios.defaults.withCredentials = true;
         try {
             const response = await axios.post(serverUrl + '/api/v1/user/login', {
