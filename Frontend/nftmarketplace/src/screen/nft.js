@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import axios from "axios";
 import { getERC20Contract, CONTRACT_ADDRESS } from "../util/contract";
+import { serverUrl } from "../util/constant";
 
 const Nft = () => {
     const id = useLoaderData();
@@ -58,7 +59,7 @@ const Nft = () => {
         formData.append('amount', listinfo.amount);
 
         try {
-            const response = await axios.post('http://localhost:5000/api/v1/nft/buy', formData, {
+            const response = await axios.post(serverUrl + '/api/v1/nft/buy', formData, {
                 headers: {
                     'Content-Type': `multipart/form-data; boundary=${formData._boundary}`, // Ensure the server knows you're sending form data
                 },

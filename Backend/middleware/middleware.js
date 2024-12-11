@@ -7,7 +7,8 @@ const test = "FlO9yja5F9IuoY0otX0v4pax+zE=";
 const auth = (req, res, next) => {
 
     try {
-        console.log(req.headers.cookie);
+        //console.log(req.headers.cookie);
+        console.log('in the auth middleware');
         const cookieToken = req.headers.cookie.split('=');
         const cookieTokensplit = cookieToken[1];
         

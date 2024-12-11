@@ -3,6 +3,7 @@ import { connectWallet, getContract, getERC721Contract, getERC1155Contract, CONT
 import { ethers } from "ethers";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { serverUrl } from "../util/constant";
 
 
 const ProfileNft = () => {
@@ -48,7 +49,7 @@ const ProfileNft = () => {
             const formData = new FormData();
             formData.append('tokenId', tokenId);
             formData.append('price', price);
-            const response = await axios.post('http://localhost:5000/api/v1/nft/sell', formData, {
+            const response = await axios.post(serverUrl + '/api/v1/nft/sell', formData, {
                 headers: {
                     'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
                 },

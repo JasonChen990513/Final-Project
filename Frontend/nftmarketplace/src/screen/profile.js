@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import { connectWallet, getContract, getERC721Contract, getERC20Contract, erc721Address, erc20Address, CONTRACT_ADDRESS, erc1155Address, getERC1155Contract } from "../util/contract";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { serverUrl } from "../util/constant";
 
 
 const Profile = () => {
@@ -27,7 +28,7 @@ const Profile = () => {
             for( let i = 0; i < balance.length; i++) {
                 try {
                     if(balance[i] > 0) {
-                        const response = await axios.get(`http://localhost:5000/api/v1/nft/get1155?nftId=${i}`);
+                        const response = await axios.get(serverUrl + `/api/v1/nft/get1155?nftId=${i}`);
                         const nft = response.data;
                         //console.log(nft);
                         const currentBalance = balance[i];
@@ -63,7 +64,7 @@ const Profile = () => {
         }
         const fetchTransactions = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/api/v1/nft/getuserhistory"); // Replace with your API endpoint
+                const response = await axios.get(serverUrl + "/api/v1/nft/getuserhistory"); // Replace with your API endpoint
                 console.log(response.data);
                 setTransactions(response.data);
             } catch (error) {
@@ -85,7 +86,7 @@ const Profile = () => {
         axios.defaults.withCredentials = true;
 
         try {
-            const response = await axios.get('http://localhost:5000/api/v1/user/getuser', {
+            const response = await axios.get(serverUrl + '/api/v1/user/getuser', {
             });
     
             console.log(response);
@@ -100,7 +101,7 @@ const Profile = () => {
         axios.defaults.withCredentials = true;
 
         try {
-            const response = await axios.get('http://localhost:5000/api/v1/nft/getuser721', {
+            const response = await axios.get(serverUrl + '/api/v1/nft/getuser721', {
             });
     
             console.log(response);
@@ -141,7 +142,7 @@ const Profile = () => {
             const formData = new FormData();
             formData.append('tokenId', 1);
             formData.append('price', 1);
-            const response = await axios.post('http://localhost:5000/api/v1/nft/sell', formData, {
+            const response = await axios.post(serverUrl + '/api/v1/nft/sell', formData, {
                 headers: {
                     'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
                 },
@@ -184,7 +185,7 @@ const Profile = () => {
         formData.append('price', ethers.formatEther(listinfo.price));
 
         try {
-            const response = await axios.post('http://localhost:5000/api/v1/nft/buy', formData, {
+            const response = await axios.post(serverUrl + '/api/v1/nft/buy', formData, {
                 headers: {
                     'Content-Type': `multipart/form-data; boundary=${formData._boundary}`, // Ensure the server knows you're sending form data
                 },

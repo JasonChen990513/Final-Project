@@ -655,7 +655,7 @@ connectDB(DB_URL);
 //enable cors
 app.use(cors(
     {    
-        origin: 'http://localhost:3000', // Replace with your React app's URL
+        origin: 'https://final-project-server-1eqv.onrender.com', // Replace with your React app's URL
         credentials: true, // Allow cookies to be sent
     }
 ));

@@ -4,6 +4,7 @@ import { connectWallet } from "../util/contract";
 import { useNavigate } from "react-router-dom";
 import { useActionsCreator } from "../hook/useActionsCreator";
 import { useSelector } from "react-redux";
+import { serverUrl } from "../util/constant";
 
 const Login = () => {
     const user = useSelector(state => state.user);
@@ -30,7 +31,7 @@ const Login = () => {
     const handleLogin = async () => {
         axios.defaults.withCredentials = true;
         try {
-            const response = await axios.post('http://localhost:5000/api/v1/user/login', {
+            const response = await axios.post(serverUrl + '/api/v1/user/login', {
                 address: address,
                 password: password
             });

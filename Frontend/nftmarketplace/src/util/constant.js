@@ -1,0 +1,1 @@
+export const serverUrl = 'https://final-project-server-1eqv.onrender.com';

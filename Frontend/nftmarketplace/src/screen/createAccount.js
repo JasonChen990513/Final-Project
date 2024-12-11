@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useActionsCreator } from "../hook/useActionsCreator";
 import { useState, useEffect } from "react";
 import { connectWallet } from "../util/contract";
+import { serverUrl } from "../util/constant";
 
 
 
@@ -31,7 +32,7 @@ const CreateAccount = () => {
         formData.append('password', password);
 
         try {
-            const response = await axios.post('http://localhost:5000/api/v1/user/register', {
+            const response = await axios.post(serverUrl + '/api/v1/user/register', {
               name: name,
               address: userAddress,
               password: password

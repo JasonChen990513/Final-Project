@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getERC721Contract, connectWallet } from "../util/contract";
-
+import { serverUrl } from "../util/constant";
 
 const CreateNft = () => {
     //get the name decription and image 
@@ -44,7 +44,7 @@ const CreateNft = () => {
         console.log(image);
 
         try {
-          const response = await axios.post('http://localhost:5000/api/v1/erc721/createNFT', formData,{
+          const response = await axios.post(serverUrl + '/api/v1/erc721/createNFT', formData,{
             headers: {
                 'Content-Type': `multipart/form-data; boundary=${formData._boundary}`, // Ensure the server knows you're sending form data
             },
@@ -97,7 +97,7 @@ const CreateNft = () => {
             formData.append('nftAddress', nft721address);
             //formData.append('owner', account);
 
-            const response = await axios.post('http://localhost:5000/api/v1/erc721/addmetadata', formData,{
+            const response = await axios.post(serverUrl + '/api/v1/erc721/addmetadata', formData,{
                 headers: {
                     'Content-Type': `multipart/form-data; boundary=${formData._boundary}`, // Ensure the server knows you're sending form data
                 },

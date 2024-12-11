@@ -29,7 +29,7 @@ const Biding = () => {
     const handlebid = async () => {
         
         const { account, signer } = await connectWallet();
-        const contract = await getContract(signer);
+        const contract = await getContract(signer);    
         const erc20 = await getERC20Contract(signer);
 
         console.log('Approving tokens...');
