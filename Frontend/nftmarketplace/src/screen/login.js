@@ -29,12 +29,15 @@ const Login = () => {
     }, [address]);
 
     const handleLogin = async () => {
+        console.log('in handleLogin');
         axios.defaults.withCredentials = true;
         try {
             const response = await axios.post(serverUrl + '/api/v1/user/login', {
                 address: address,
                 password: password
             });
+            console.log(response);
+            console.log('finish login');
     
             // console.log(response.data);
             // console.log(response.data?.data?.token);
