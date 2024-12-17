@@ -39,7 +39,7 @@ const CreateAccount = () => {
             });
         
             console.log('Response:', response.data);
-
+            navigate('/login');
 
           } catch (error) {
             console.error('Error sending data:', error);
